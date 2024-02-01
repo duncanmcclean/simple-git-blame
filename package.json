@@ -13,8 +13,8 @@
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "simple-git-blame.helloWorld",
-      "title": "Hello World"
+      "command": "simple-git-blame.simpleGitBlame",
+      "title": "Simple Git Blame"
     }]
   },
   "scripts": {
