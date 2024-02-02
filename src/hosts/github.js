@@ -13,6 +13,10 @@ class GitHub {
      * @returns string
      */
     repositoryName() {
+        if (this.remoteUrl.includes('https://')) {
+            return this.remoteUrl.replace(/(https:\/\/github.com\/|\.git)/g, '');
+        }
+
         return this.remoteUrl.replace(/(.git|git@github.com:)/g, '');
     }
 
