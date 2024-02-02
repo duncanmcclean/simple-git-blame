@@ -1,7 +1,7 @@
 {
   "name": "simple-git-blame",
   "displayName": "Simple Git Blame",
-  "description": "Simple command to open the Git Blame page on GitHub.",
+  "description": "A Simple Git Blame command for VS Code.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.86.0"
