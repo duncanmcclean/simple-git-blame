@@ -1,11 +1,11 @@
 name: Release
 
-# This workflow tags a release, builds front-end assets and sends various notifications & webhooks when a release has been created.
-# How to use:
-# 1. Create a git tag - `git tag <version number>`
-# 2. Push tags to the origin - `git push origin --tags`
-# 3. This Github Action will do its stuff...
-# 4. Then it will pull the latest notes from CHANGELOG.md and add them to the release.
+# How to tag a release:
+# 1. Write a changelog & commit it.
+# 2. Increment the version number in package.json & commit it.
+# 3. Run `vsce package` to create a .vsix file
+# 4. Upload the .vsix file to the Visual Studio Marketplace (https://marketplace.visualstudio.com/manage/publishers)
+# 5. Create a Git tag with the version number (e.g. `git tag 1.2.3`) and this workflow will create a release on GitHub.
 
 on:
   push:
