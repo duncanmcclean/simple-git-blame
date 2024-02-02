@@ -1,9 +1,5 @@
-# Change Log
+# Changelog
 
-All notable changes to the "simple-git-blame" extension will be documented in this file.
+## v0.0.1 (2024-02-02)
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+Initial release
