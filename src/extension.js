@@ -1,3 +1,4 @@
+const GitHub = require('./hosts/github');
 const vscode = require('vscode');
 
 /**
@@ -17,19 +18,10 @@ function activate(context) {
 
         // Find the repository for the workspace folder & get the name of the GitHub remote repository.
         const repository = gitAPI.repositories.find(repository => repository.rootUri.path === workspaceFolder.uri.path);
+        if (! repository) return vscode.window.showErrorMessage(`A Git repository could not be found for this workspace folder.`);
 
         const originRemote = repository.state.remotes.find(remote => remote.name === 'origin');
-        let repositoryName = originRemote.fetchUrl;
-
-        if (! repositoryName.includes('github.com')) {
-            return vscode.window.showInformationMessage('Houston, we have a problem. Not a GitHub repository.');
-        }
-
-        repositoryName = repositoryName.replace('.git', '');
-        repositoryName = repositoryName.replace('git@github.com:', '');
-
-        // Get the current branch.
-        const branchName = repository.state.HEAD.name;
+        if (! originRemote) return vscode.window.showErrorMessage(`An origin remote could not be found for this Git repository.`);
 
         // Get the file path relative to the repository root for the current file.
         const absoluteFilePath = vscode.window.activeTextEditor.document.uri.path;
@@ -39,13 +31,19 @@ function activate(context) {
         const lineSelectionsFrom = vscode.window.activeTextEditor.selection.start.line + 1;
         const lineSelectionsTo = vscode.window.activeTextEditor.selection.end.line + 1;
 
-        const lineNumbers = lineSelectionsFrom === lineSelectionsTo ? `L${lineSelectionsFrom}` : `L${lineSelectionsFrom}-L${lineSelectionsTo}`;
+        if (originRemote.fetchUrl.includes('github.com')) {
+            const github = new GitHub(
+                originRemote.fetchUrl,
+                repository.state.HEAD.name,
+                relativeFilePath,
+                lineSelectionsFrom,
+                lineSelectionsTo
+            );
 
-        // Construct the Git Blame URL.
-        const githubBlameUrl = `https://github.com/${repositoryName}/blame/${branchName}${relativeFilePath}#${lineNumbers}`
-
-        // Open the Git Blame URL in the default browser.
-        vscode.env.openExternal(vscode.Uri.parse(githubBlameUrl));
+            vscode.env.openExternal(vscode.Uri.parse(github.getBlameUrl()));
+        } else {
+            return vscode.window.showErrorMessage(`Your Git remote is not supported by this extension.`);
+        }
 	});
 
 	context.subscriptions.push(disposable);
